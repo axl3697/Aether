@@ -1,6 +1,3 @@
-# Aether
+Team Name: Aether
+Team members: Ana Hakstok, Ante Hakstok, Marko Pancirov, Antonio Labriola
 
-Ana Hakstok
-Ante Hakstok
-Marko Pancirov
-Antonio Labriola
