@@ -12,7 +12,7 @@
 
 <h1>Team number: 2</h1>
 
-<p>Team members: Ana Hakstok, Ante Hakstok, Marko Pancirov, Antonio Labriola</p>
+<p style="color: green;">Team members: Ana Hakstok, Ante Hakstok, Marko Pancirov, Antonio Labriola</p>
 
 </body>
 </html>
