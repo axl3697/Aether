@@ -105,6 +105,11 @@ public class MP3Player {
                 println("R = Resume playback if any.") ;
                 println("t = Print the playback position in seconds.") ;
                 println("s = Print number of playlist entries.") ;
+                
+                println("normal = Normal(default) mode of playing.") ;
+                println("repeat = When the playlist finishes, it starts over from the beginning.") ;
+                println("random = Next song is selected randomly.") ;
+                
                 println("q = Quit the player.") ;
             }
             else if( command.equals("i") || command.equals("info") ) {
@@ -176,6 +181,15 @@ public class MP3Player {
                 int secs = position % 60 ;
                 int mins = position / 60 ;
                 System.out.printf("Source position: %d:%02d\n", mins, secs) ;
+            }
+            else if( command.equals("normal") ) {
+                pl.setMode(PlayList.Mode.NORMAL);
+            }
+            else if( command.equals("repeat") ) {
+                pl.setMode(PlayList.Mode.REPEAT);
+            }
+            else if( command.equals("random") ) {
+                pl.setMode(PlayList.Mode.RANDOM);
             }
             else if( command.equals("q") || command.equals("quit") ) 
             {

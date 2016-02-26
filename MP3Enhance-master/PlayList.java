@@ -11,7 +11,7 @@
 import java.util.Observer ;
 import java.util.Observable ;
 import java.util.ArrayList ;
-
+import java.util.Random;
 /*
  * SWEN383 classes for managing and playing audio files.
  */
@@ -37,20 +37,24 @@ public class PlayList implements Observer {
      */
     private final AudioPlayer player ;
 
+    public enum Mode{
+       NORMAL, REPEAT, RANDOM
+    }
+    
+    /**
+     * An attribute used to store the information about which mode of playing we should use
+     * Possible modes are: normal / repeat / random
+     */
+    private Mode mode;
+    
     /**
      * Create a new play list from an array of <code>String</code>s naming
      * MP3 files.
      * The list itself contains <code>AudioSource</code> objects created
      * from the filenames.
      *
-     * @param fileNames The array of audio filenames for this play list.
-     */
-     
-     
-    //Team members: Marko Pancirov, Ana Hakstok, Ante Hakstok, Antonio Labriola
-    
-    //Here code is little bit changed. Instead of String[] parameter we have Iterable<String> parameter.
-    //Instead of the usual for loop, we have a foreach loop
+     * @param files The Iterable object which contains the file names to play
+     */     
     public PlayList(Iterable<String> files) 
     {
         for(String element : files) 
@@ -70,8 +74,18 @@ public class PlayList implements Observer {
         
         player = AudioPlayer.getPlayer();
         player.addObserver(this);
+        
+        setMode(Mode.NORMAL);
     }
 
+    /**
+     * Set the mode(normal, repeat, random)
+     */
+    public void setMode(Mode mode)
+    {
+       this.mode = mode;
+    }
+     
     /**
      * Return the size of the play list (the number of
      * <code>AudioSource</code>s in it).
@@ -155,15 +169,30 @@ public class PlayList implements Observer {
             return ;
         }
 
-        /*
-         * Advance to the next AudioSource unless we
-         * just played the last one.
-         */
-        int nextIndex = currentIndex + 1 ;
-        if( nextIndex < size() ) {
-            playAudioSource(nextIndex) ;
-        } else {
-            currentIndex = (-1) ;
+        //In the normal (default) mode, PlayList continues to the next playlist source, stopping after the last source is played.
+        if(mode == Mode.NORMAL)
+        {
+           int nextIndex = currentIndex + 1 ;
+           if( nextIndex < size() ) {
+               playAudioSource(nextIndex) ;
+           } else {
+               currentIndex = (-1) ;
+           }
+        } 
+        else if(mode == Mode.REPEAT)//Repeat mode differs from normal only when the last source is played, when repeat will loop back to the playlist start.
+        {
+           int nextIndex = currentIndex + 1 ;
+           if( nextIndex < size() ) {
+               playAudioSource(nextIndex) ;
+           } else {
+               playAudioSource(0);
+           }
+        } 
+        else if(mode == Mode.RANDOM)//Random, after each source completes, selects the next source at random from the list.
+        {
+           Random r = new Random();
+           int nextRandomIndex = r.nextInt(size());
+           playAudioSource(nextRandomIndex);
         }
     }
 
