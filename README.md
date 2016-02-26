@@ -1,5 +1,5 @@
 <h1>Team number: 2</h1>
-<h2>Team Name: Aether</h2>
+<h4>Team Name: Aether</h4>
 Team members: Ana Hakstok, Ante Hakstok, Marko Pancirov, Antonio Labriola
 
 
