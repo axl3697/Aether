@@ -52,7 +52,7 @@ public class MP3Player {
          * Command loop.
          * Unrecognized commands are ignored.
          */
-        //char command = ' ' ;
+        
         while( true ) {
             
             /*
@@ -66,138 +66,59 @@ public class MP3Player {
              */
             String arguments[] = s.split("\\s+") ;
             String command = arguments[0] ;
+            Command cmd = null;
             /*
              * Arguments 1 .. N are things like the playlist
              * index to be used, etc.
              */ 
  
             if( command.equals("+") || command.equals("next") ) {
-                int nextIndex = pl.getSourceIndex() + 1 ;
-                /*
-                 * Don't move beyond the last play list element.
-                 */
-                if( nextIndex < pl.size() ) {
-                    pl.play(nextIndex) ;
-                }
+               cmd = new PlayNextCommand();
             }
             else if( command.equals("-") || command.equals("prev") ) {
-                int prevIndex = pl.getSourceIndex() - 1 ;
-                /*
-                 * Don't move before the first play list element.
-                 */
-                if( prevIndex >= 0 ) {
-                    pl.play(prevIndex) ;
-                }
+               cmd = new PlayPrevCommand();
             }
             else if( command.equals("@") || command.equals("again") ) {
-                pl.play(pl.getSourceIndex()) ;
+                cmd = new PlayAgainCommand();
             }
             else if( command.equals("h") || command.equals("H") || command.equals("?") || command.equals("help") ) {
-                println("+ = Play the file after the current one.");
-                println("- = Play the file before the current one.");
-                println("@ = Replay the current file.") ;
-                println("h or H or ? = Print this help screen.") ;
-                println("i [n] = Print information on file #'n'") ;
-                println("        (or the current file if 'n' is omitted).") ;
-                println("p [n] = Terminate any playback and start playing") ;
-                println("        AudioSource #'n' (default 0).") ;
-                println("P = Pause playback if any.") ;
-                println("R = Resume playback if any.") ;
-                println("t = Print the playback position in seconds.") ;
-                println("s = Print number of playlist entries.") ;
-                
-                println("normal = Normal(default) mode of playing.") ;
-                println("repeat = When the playlist finishes, it starts over from the beginning.") ;
-                println("random = Next song is selected randomly.") ;
-                
-                println("q = Quit the player.") ;
+                cmd = new HelpCommand();
             }
             else if( command.equals("i") || command.equals("info") ) {
-                AudioSource as = null ;
-                int i = -1 ;
-
-                try {
-                    String iv = s.substring(1).trim() ;
-                    i = Integer.parseInt(iv) ;
-                } catch(Exception e) {
-                    i = -1 ; // no integer argument.
-                } ;
-                if( i < 0 ) {
-                    i = pl.getSourceIndex() ;
-                }
-                as = pl.getSource(i) ;
-
-                if( i == (-1) ) {
-                    println("Player is idle") ;
-                } else if( as != null ) {
-                    int duration = as.getDuration() ;
-                    int secs = duration % 60 ;
-                    int mins = duration / 60 ;
-
-                    println("Index:    " + i) ;
-                    println("File:     " + as.getFileName()) ;
-                    println("Title:    " + as.getTitle()) ;
-                    println("Artist:   " + as.getArtist()) ;
-                    println("Album:    " + as.getAlbum()) ;
-                    println("Genre:    " + as.getGenre()) ;
-                    System.out.printf ("Duration: %d:%02d\n", mins, secs) ;
-                }
+               cmd = new InfoCommand(); 
+               InfoCommand icmd = (InfoCommand) cmd;
+               icmd.setConsoleStringReference(s);
             }               
-            else if( command.equals("p") || command.equals("play") ) {
-                
-                //Play a source. If an integer is given, play that list entry,
-                //otherwise the first source in the list.
-                int index ; 
-                if( arguments.length == 1 ) 
-                { 
-                   index = 0 ;
-                } 
-                else 
-                {
-                   try 
-                   {
-                      index = Integer.parseInt(arguments[1]) ;
-                   } 
-                   catch(Exception e) 
-                   {
-                     index = 0 ; 
-                   }
-                }
-                
-                pl.play(index) ; 
-                   
+            else if( command.equals("p") || command.equals("play") ) { 
+               cmd = new PlayCommand();    
             }
             else if( command.equals("P") || command.equals("pause") ) {
-                pl.pause() ;
+               cmd = new PauseCommand(); 
             }
             else if( command.equals("R") || command.equals("resume") ) {
-                pl.resume() ;
+               cmd = new ResumeCommand(); 
             }
             else if( command.equals("s") || command.equals("size") ) {
-                println("Playlist size: " + pl.size()) ;
+               cmd = new SizeCommand(); 
             }
             else if( command.equals("t") || command.equals("time") ) {
-                int position = pl.getPosition() / 1000 ; // remove milliseconds
-                int secs = position % 60 ;
-                int mins = position / 60 ;
-                System.out.printf("Source position: %d:%02d\n", mins, secs) ;
+               cmd = new TimeCommand(); 
             }
             else if( command.equals("normal") ) {
-                pl.setMode(PlayList.Mode.NORMAL);
+               cmd = new PlayNormalModeCommand(); 
             }
             else if( command.equals("repeat") ) {
-                pl.setMode(PlayList.Mode.REPEAT);
+               cmd = new PlayRepeatModeCommand(); 
             }
             else if( command.equals("random") ) {
-                pl.setMode(PlayList.Mode.RANDOM);
+               cmd = new PlayRandomModeCommand(); 
             }
             else if( command.equals("q") || command.equals("quit") ) 
             {
-                //System.exit(0) rather than return as there is another thread
-                //running and a return would only terminate the main thread.
-                System.exit(0) ;
+               cmd = new QuitCommand(); 
             }
-
+            
+            cmd.execute(arguments, pl);
         }
         
     }
