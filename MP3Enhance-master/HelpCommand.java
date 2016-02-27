@@ -1,6 +1,6 @@
 public class HelpCommand implements Command
 {
-   public void execute(String[] args, PlayList pl)
+   public void execute(String[] args, PlayList pl, String s)
    {
                 System.out.println("+ = Play the file after the current one.");
                 System.out.println("- = Play the file before the current one.");

@@ -1,15 +1,8 @@
 import edu.rit.se.swen383.audio.AudioSource;
 
 public class InfoCommand implements Command
-{
-   private String s;
-   
-   public void setConsoleStringReference(String s)
-   {
-      this.s = s;
-   }
-   
-   public void execute(String[] args, PlayList pl)
+{  
+   public void execute(String[] args, PlayList pl, String s)
    {
       AudioSource as = null ;
                 int i = -1 ;

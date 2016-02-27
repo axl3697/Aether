@@ -1,6 +1,6 @@
 public class PlayCommand implements Command
 {
-   public void execute(String[] arguments, PlayList pl)
+   public void execute(String[] arguments, PlayList pl, String s)
    {
    //Play a source. If an integer is given, play that list entry,
                 //otherwise the first source in the list.

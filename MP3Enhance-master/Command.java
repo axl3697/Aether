@@ -1,4 +1,4 @@
 public interface Command
 {
-   public void execute(String[] args, PlayList pl);
+   public void execute(String[] args, PlayList pl, String s);
 }

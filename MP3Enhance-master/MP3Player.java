@@ -5,6 +5,7 @@
  */
 
 import edu.rit.se.swen383.audio.AudioSource;
+import java.util.*;
 
 public class MP3Player {
     /*
@@ -48,11 +49,13 @@ public class MP3Player {
         
         PlayList pl = new PlayList(mp3names); 
          
+         
+        Command cmd = null;
+        Map<String, Command> commandMap = buildMap() ;
         /*
          * Command loop.
          * Unrecognized commands are ignored.
          */
-        
         while( true ) {
             
             /*
@@ -66,63 +69,81 @@ public class MP3Player {
              */
             String arguments[] = s.split("\\s+") ;
             String command = arguments[0] ;
-            Command cmd = null;
             /*
              * Arguments 1 .. N are things like the playlist
              * index to be used, etc.
              */ 
- 
-            if( command.equals("+") || command.equals("next") ) {
-               cmd = new PlayNextCommand();
-            }
-            else if( command.equals("-") || command.equals("prev") ) {
-               cmd = new PlayPrevCommand();
-            }
-            else if( command.equals("@") || command.equals("again") ) {
-                cmd = new PlayAgainCommand();
-            }
-            else if( command.equals("h") || command.equals("H") || command.equals("?") || command.equals("help") ) {
-                cmd = new HelpCommand();
-            }
-            else if( command.equals("i") || command.equals("info") ) {
-               cmd = new InfoCommand(); 
-               InfoCommand icmd = (InfoCommand) cmd;
-               icmd.setConsoleStringReference(s);
-            }               
-            else if( command.equals("p") || command.equals("play") ) { 
-               cmd = new PlayCommand();    
-            }
-            else if( command.equals("P") || command.equals("pause") ) {
-               cmd = new PauseCommand(); 
-            }
-            else if( command.equals("R") || command.equals("resume") ) {
-               cmd = new ResumeCommand(); 
-            }
-            else if( command.equals("s") || command.equals("size") ) {
-               cmd = new SizeCommand(); 
-            }
-            else if( command.equals("t") || command.equals("time") ) {
-               cmd = new TimeCommand(); 
-            }
-            else if( command.equals("normal") ) {
-               cmd = new PlayNormalModeCommand(); 
-            }
-            else if( command.equals("repeat") ) {
-               cmd = new PlayRepeatModeCommand(); 
-            }
-            else if( command.equals("random") ) {
-               cmd = new PlayRandomModeCommand(); 
-            }
-            else if( command.equals("q") || command.equals("quit") ) 
-            {
-               cmd = new QuitCommand(); 
-            }
-            
-            cmd.execute(arguments, pl);
-        }
+             
+            cmd = commandMap.get(command);
+            if( cmd != null ) {
+               cmd.execute(arguments, pl, s) ;
+            } 
+         }
         
     }
 
+    private static Map<String, Command> buildMap( ) {
+       Command c ;
+       Map<String, Command> result = new HashMap<String, Command>() ;
+       
+       c = new PlayNextCommand() ;
+       result.put("+", c) ;
+       result.put("next", c) ;
+       
+       c = new PlayPrevCommand() ;
+       result.put("-", c) ;
+       result.put("prev", c) ;
+       
+       c = new PlayAgainCommand() ;
+       result.put("@", c) ;
+       result.put("again", c) ;
+       
+       c = new HelpCommand() ;
+       result.put("h", c) ;
+       result.put("H", c) ;
+       result.put("?", c) ;
+       result.put("help", c) ;
+       
+       c = new InfoCommand(); 
+       result.put("i", c) ;
+       result.put("info", c) ;
+       
+       c = new PlayCommand() ;
+       result.put("p", c) ;
+       result.put("play", c) ;
+       
+       c = new PauseCommand() ;
+       result.put("P", c) ;
+       result.put("pause", c) ;
+       
+       c = new ResumeCommand() ;
+       result.put("R", c) ;
+       result.put("resume", c) ;
+       
+       c = new SizeCommand() ;
+       result.put("s", c) ;
+       result.put("size", c) ;
+       
+       c = new TimeCommand() ;
+       result.put("t", c) ;
+       result.put("time", c) ;
+       
+       c = new PlayNormalModeCommand() ;
+       result.put("normal", c) ;
+       
+       c = new PlayRepeatModeCommand() ;
+       result.put("repeat", c) ;
+       
+       c = new PlayRandomModeCommand() ;
+       result.put("random", c) ;
+       
+       c = new QuitCommand() ;
+       result.put("q", c) ;
+       result.put("quit", c) ;
+              
+       return result ;
+    }
+     
     private static void println(String s) {
         System.out.println(s) ;
     }
