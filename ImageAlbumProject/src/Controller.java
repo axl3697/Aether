@@ -5,9 +5,8 @@ import GUI.*;
 import UndoRedo.BasicUndoRedoStack;
 
 /**
- * StartUpController.java - A class that sets up the file IO and the GUI
- */
-public class StartUpController {
+ * StartUpController.java - Controller class which starts up the whole application */
+public class Controller {
 	/**
 	 * @param args - Arguments sent into program
 	 */
